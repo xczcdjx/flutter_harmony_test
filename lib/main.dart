@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_all_test/models/banner_entity.dart';
+import 'package:flutter_all_test/pages/testPage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api/http.dart';
+import 'models/req/banner_entity.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -17,21 +19,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter All Test',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -66,11 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
@@ -138,7 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Column(
         children: [
           SizedBox(height: 10,),
-          banner.isEmpty
+          /*banner.isEmpty
               ? const Center(child: CircularProgressIndicator()) // 加载中
               : SizedBox(
             height: 200, // 固定高度
@@ -210,7 +192,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
             ),
-          )
+          )*/
+          TestPage()
         ],
       ),
 
