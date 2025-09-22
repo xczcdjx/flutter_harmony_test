@@ -1,28 +1,25 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_all_test/pages/testPage.dart';
+import 'package:flutter_all_test/router/index.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'api/http.dart';
 import 'models/req/banner_entity.dart';
 
 void main() {
-  runApp(const ProviderScope(child: MyApp()));
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter All Test',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: MyHomePage(title: 'Transient'),
+    return MaterialApp.router(
+      routerConfig: router,
+      title: 'Transient',
     );
   }
 }

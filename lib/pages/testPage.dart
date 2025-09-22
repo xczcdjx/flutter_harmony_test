@@ -14,28 +14,32 @@ class TestPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final count = useSelector(ref, counterProvider, (s) => s.count);
     final nCount = useSelector(ref, numProvider, (s) => s.count);
-    final dispatch=useAppDispatch(ref);
+    final dispatch = useAppDispatch(ref);
 
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Count: $count,NumCount: $nCount", style: TextStyle(fontSize: 32)),
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              dispatch.counter.incrementAsync();
-              dispatch.num.incrementAsync();
-            },
-            child: Text("Async +1"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              dispatch.counter.increment();
-              dispatch.num.increment();
-            },
-            child: Text("+1"),
-          ),
-          CountTest()
-        ]);
+    return Scaffold(
+        appBar: AppBar(title: Text("Test page"),),
+        body: Center(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Text("Count: $count,NumCount: $nCount",
+                style: TextStyle(fontSize: 32)),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                dispatch.counter.incrementAsync();
+                dispatch.num.incrementAsync();
+              },
+              child: Text("Async +1"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                dispatch.counter.increment();
+                dispatch.num.increment();
+              },
+              child: Text("+1"),
+            ),
+            CountTest()
+          ]),
+        ));
   }
 }
