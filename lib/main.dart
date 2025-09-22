@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_all_test/models/banner_entity.dart';
+
+import 'api/http.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,8 +41,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-
-   MyHomePage({super.key, required this.title});
+  MyHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -51,7 +53,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-  ({String device, String poem}) dInfo=getDevice();
+  ({String device, String poem}) dInfo = getDevice();
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -59,6 +61,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  final http = Http();
+  List<BannerItem> banner = [];
 
   void _incrementCounter() {
     setState(() {
@@ -70,68 +74,157 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
   @override
   void initState() {
     super.initState();
     print("device ${getDevice()}");
+    _getBanner();
+  }
+
+  _getBanner() async {
+    /*const jsonStr = '''
+  {
+    "banners": [
+      {
+        "id": "1756981340644",
+        "link": null,
+        "sort": 1,
+        "type": "remote",
+        "title": "",
+        "imgUrl": "http://transient.online/static/mediaLg/2025/09/04/dh1-1756981760277.png",
+        "subTitle": "寥廓东湖..."
+      },
+      {
+        "id": "1756981935974",
+        "link": null,
+        "sort": 2,
+        "type": "remote",
+        "title": "东湖樱园",
+        "imgUrl": "http://transient.online/static/mediaLg/2025/09/04/dh2.pic-1756981955828.jpg",
+        "subTitle": "走进武汉东湖磨山樱花园..."
+      },
+      {
+        "id": "1756982034841",
+        "link": null,
+        "sort": 0,
+        "type": "local",
+        "title": "东湖",
+        "imgUrl": "http://transient.online/static/mediaLg/2025/09/04/dh3.pic-1756982046725.jpg",
+        "subTitle": "东湖，又称裹脚湖..."
+      }
+    ],
+    "version": "1.1.0"
+  }
+  ''';
+    final entity=bannerEntityFromJson(jsonStr);*/
+    final res1 = await http.get<Map<String, dynamic>>("/home/banner",
+        queryParameters: {"page": 1});
+    // final list=bannerEntityFromJson(res1.data?["data"]);
+    final rr = BannerEntity.fromJson(res1.data?["data"]);
+    setState(() {
+      banner = rr.banners ?? [];
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text("${widget.title} ${widget.dInfo.device}"),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              widget.dInfo.poem,
-              style: const TextStyle(fontSize: 18),
+      body:
+      Column(
+        children: [
+          SizedBox(height: 10,),
+          banner.isEmpty
+              ? const Center(child: CircularProgressIndicator()) // 加载中
+              : SizedBox(
+            height: 200, // 固定高度
+            child: PageView.builder(
+              itemCount: banner.length,
+              controller: PageController(viewportFraction: 0.95),
+              itemBuilder: (context, index) {
+                final item = banner[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        // 图片
+                        if (item.imgUrl != null)
+                          Image.network(
+                            item.imgUrl!,
+                            fit: BoxFit.cover,
+                          ),
+                        // 底部文字遮罩
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Colors.black.withOpacity(0.7),
+                                  Colors.transparent,
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  item.title ?? "",
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  item.subTitle ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white70,
+                                  ),
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+          )
+        ],
       ),
+
+
+
       floatingActionButton: TextButton(
         onPressed: _incrementCounter,
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
-({String device,String poem}) getDevice() {
+
+({String device, String poem}) getDevice() {
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
       return (device: "Android", poem: "事必专任，乃可责成。力无他分，乃能就绪。");
