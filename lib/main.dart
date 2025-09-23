@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_all_test/hooks/useStore.dart';
 import 'package:flutter_all_test/router/index.dart';
+import 'package:flutter_all_test/store/index.dart';
 import 'package:flutter_all_test/styles/theme.dart';
 import 'package:flutter_all_test/utils/shareStorage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,17 +26,18 @@ void main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     // print("lang ${Localizations.localeOf(context)}");
+    final themeMode=useSelector(ref, settingProvider, (s)=>s.themeMode);
     return MaterialApp.router(
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: themeMode,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,

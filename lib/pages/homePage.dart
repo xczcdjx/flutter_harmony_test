@@ -2,29 +2,35 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_all_test/hooks/useStore.dart';
+import 'package:flutter_all_test/store/index.dart';
 import 'package:flutter_all_test/widgets/langSwitch.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../api/http.dart';
 import '../models/req/banner_entity.dart';
 import '../router/routes.dart';
+import '../extensions/customColors.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final dispatch = useDispatch(ref, settingProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('hello'.tr()),
-        actions: [
-          LangSwitch()
-        ],
+        title: Text(
+          'hello'.tr(),
+          style: TextStyle(color: context.primary),
+        ),
+        actions: [LangSwitch()],
       ),
       body: Column(
         children: [
@@ -37,17 +43,32 @@ class _HomePageState extends State<HomePage> {
           TextButton(
               onPressed: () {
                 context.push(Uri(
-                        path: Routes.detail+"/111",
-                        queryParameters: {'name': '张三', 'gender': '男'})
-                    .toString());
+                    path: Routes.detail + "/111",
+                    queryParameters: {'name': '张三', 'gender': '男'}).toString());
               },
               child: Text('Go detail')),
+          Row(
+            children: [
+              ...[Icons.settings, Icons.light_mode, Icons.dark_mode]
+                  .asMap()
+                  .entries
+                  .map((entry) {
+                final i = entry.key;
+                final icon = entry.value;
+                return IconButton(
+                  onPressed: () async {
+                    dispatch.toggleTheme(i);
+                  },
+                  icon: Icon(icon),
+                );
+              })
+            ],
+          )
         ],
       ),
     );
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({super.key, required this.title});

@@ -10,5 +10,6 @@ extension CustomThemeColors on BuildContext {
   Color get primaryBtn => customColors.primaryButton ?? Theme.of(this).colorScheme.primary;
   Color get cardBg => customColors.cardBackground ?? Theme.of(this).colorScheme.surface;
   Color get success => customColors.successText ?? Colors.green;
+  Color get primary => customColors.primaryText ?? Colors.orange;
   Color get warning => customColors.warningText ?? Colors.red;
 }
