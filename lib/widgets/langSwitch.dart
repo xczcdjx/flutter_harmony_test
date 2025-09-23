@@ -1,17 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_all_test/utils/shareStorage.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../store/index.dart';
-
-class LangSwitch extends ConsumerStatefulWidget {
+class LangSwitch extends StatefulWidget {
   bool iconRender;
 
   LangSwitch({super.key, this.iconRender = false});
 
   @override
-  ConsumerState<LangSwitch> createState() => _LangSwitch();
+  State<LangSwitch> createState() => _LangSwitch();
 }
 
 class LanCls {
@@ -21,25 +18,36 @@ class LanCls {
   LanCls(this.k, this.v);
 }
 
-class _LangSwitch extends ConsumerState<LangSwitch> {
-
+class _LangSwitch extends State<LangSwitch> {
+  String _currentLang = "en";
   final List<LanCls> languages = [
     LanCls("en", "English"),
     LanCls("zh", "中文"),
   ];
-  @override
-  void initState() {
-    super.initState();
-    _loadLang();
+// 切换语言并保存到本地
+  Future<void> changeLanguage(String lang) async {
+    await context.setLocale(Locale(lang));
+    // await ShareStorage.set('locale', locale.languageCode);
   }
-
   Future<void> _loadLang() async {
-    final savedLang = ShareStorage.get('locale');
+    final savedLang=ShareStorage.get('locale');
+    print(savedLang);
     if (savedLang != null) {
-      ref.read(localeProvider.notifier).state = Locale(savedLang);
+      setState(() {
+        _currentLang = savedLang;
+      });
+      // context.setLocale(Locale(savedLang));
+    } else {
+      // 如果没有保存过，使用系统语言
+      final systemLocale = context.deviceLocale.languageCode;
+      if (languages.any((l) => l.k == systemLocale)) {
+        setState(() {
+          _currentLang = systemLocale;
+        });
+        // context.setLocale(Locale(systemLocale));
+      }
     }
   }
-  /*
   @override
   void initState() {
     // TODO: implement initState
@@ -47,10 +55,9 @@ class _LangSwitch extends ConsumerState<LangSwitch> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadLang();
     });
-  }*/
+  }
   @override
   Widget build(BuildContext context) {
-    final currentLocale = ref.watch(localeProvider);
     return widget.iconRender
         ? GestureDetector(
             onTapDown: (details) async {
@@ -69,7 +76,7 @@ class _LangSwitch extends ConsumerState<LangSwitch> {
                     child: Text(
                       entry.v,
                       style: TextStyle(
-                        color: entry.k == currentLocale.languageCode
+                        color: entry.k == _currentLang
                             ? Colors.red
                             : Colors.white,
                       ),
@@ -83,7 +90,7 @@ class _LangSwitch extends ConsumerState<LangSwitch> {
           )
         : DropdownButton<String>(
             dropdownColor: Color(0xFF001F3F),
-            value: currentLocale.languageCode,
+            value: _currentLang,
             items: languages.map((entry) {
               return DropdownMenuItem<String>(
                 value: entry.k,
@@ -96,10 +103,10 @@ class _LangSwitch extends ConsumerState<LangSwitch> {
 
   _switchLang(String? val) {
     if (val != null) {
-      final newLocale = Locale(val);
-      ref.read(localeProvider.notifier).state = newLocale;
-      context.setLocale(newLocale);
-      ShareStorage.set('locale', val);
+      setState(() {
+        _currentLang = val;
+      });
+      changeLanguage(_currentLang);
     }
   }
 }

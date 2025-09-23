@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_all_test/router/index.dart';
-import 'package:flutter_all_test/store/index.dart';
 import 'package:flutter_all_test/styles/theme.dart';
 import 'package:flutter_all_test/utils/shareStorage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,20 +24,20 @@ void main() async {
   ));
 }
 
-class MyApp extends ConsumerWidget {
+class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final locale = ref.watch(localeProvider);
+  Widget build(BuildContext context) {
+    // print("lang ${Localizations.localeOf(context)}");
     return MaterialApp.router(
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      locale: locale,
+      locale: context.locale,
       routerConfig: router,
       title: 'Transient',
     );
