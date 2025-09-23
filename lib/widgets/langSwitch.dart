@@ -27,6 +27,7 @@ class _LangSwitch extends State<LangSwitch> {
 // 切换语言并保存到本地
   Future<void> changeLanguage(String lang) async {
     await context.setLocale(Locale(lang));
+    await WidgetsBinding.instance.performReassemble(); // ui重汇
     // await ShareStorage.set('locale', locale.languageCode);
   }
   Future<void> _loadLang() async {
