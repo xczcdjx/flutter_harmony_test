@@ -196,10 +196,9 @@ packages:
   easy_localization:
     dependency: "direct main"
     description:
-      name: easy_localization
-      sha256: "2ccdf9db8fe4d9c5a75c122e6275674508fd0f0d49c827354967b8afcc56bbed"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
+      path: "../mPackages/easy_localization"
+      relative: true
+    source: path
     version: "3.0.8"
   easy_logger:
     dependency: transitive
@@ -544,11 +543,12 @@ packages:
   shared_preferences:
     dependency: "direct main"
     description:
-      name: shared_preferences
-      sha256: "95f9997ca1fb9799d494d0cb2a780fd7be075818d59f00c43832ed112b158a82"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.3.3"
+      path: "packages/shared_preferences/shared_preferences"
+      ref: HEAD
+      resolved-ref: "67849562952d80d7cd0f05f1595333fb2af76217"
+      url: "https://gitcode.com/openharmony-tpc/flutter_packages.git"
+    source: git
+    version: "2.2.0"
   shared_preferences_android:
     dependency: transitive
     description:
@@ -573,6 +573,15 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.4.1"
+  shared_preferences_ohos:
+    dependency: transitive
+    description:
+      path: "packages/shared_preferences/shared_preferences_ohos"
+      ref: HEAD
+      resolved-ref: "67849562952d80d7cd0f05f1595333fb2af76217"
+      url: "https://gitcode.com/openharmony-tpc/flutter_packages.git"
+    source: git
+    version: "2.2.0"
   shared_preferences_platform_interface:
     dependency: transitive
     description:
