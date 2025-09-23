@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_all_test/hooks/useStore.dart';
 import 'package:flutter_all_test/store/index.dart';
 import 'package:flutter_all_test/widgets/langSwitch.dart';
+import 'package:flutter_all_test/widgets/themeSwitch.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,11 +31,11 @@ class _HomePageState extends ConsumerState<HomePage> {
           'hello'.tr(),
           style: TextStyle(color: context.primary),
         ),
-        actions: [LangSwitch()],
+        actions: [ThemeSwitch(),SizedBox(width: 5,),LangSwitch()],
       ),
       body: Column(
         children: [
-          Text("Home"),
+          /*Text("Home"),
           TextButton(
               onPressed: () {
                 context.push(Routes.test);
@@ -46,7 +47,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                     path: Routes.detail + "/111",
                     queryParameters: {'name': '张三', 'gender': '男'}).toString());
               },
-              child: Text('Go detail')),
+              child: Text('Go detail')),*/
           Row(
             children: [
               ...[Icons.settings, Icons.light_mode, Icons.dark_mode]
