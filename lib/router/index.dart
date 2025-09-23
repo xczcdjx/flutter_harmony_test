@@ -6,7 +6,8 @@ import '../pages/testPage.dart';
 
 import 'routes.dart';
 
-final GoRouter router = GoRouter(
+final GoRouter router= GoRouter(
+  // refreshListenable: ValueNotifier(context),
   initialLocation: '/',
   routes: [
     GoRoute(

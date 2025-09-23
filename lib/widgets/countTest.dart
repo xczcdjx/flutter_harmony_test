@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +17,24 @@ class CountTest extends ConsumerWidget {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          ElevatedButton(
+            onPressed: () async {
+              EasyLocalization.of(context)!.setLocale(const Locale('en'));
+
+              print("lang ${Localizations.localeOf(context)}");
+
+            },
+            child: const Text("English"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              EasyLocalization.of(context)!.setLocale(const Locale('zh'));
+
+              print("lang ${Localizations.localeOf(context)}");
+
+            },
+            child: const Text("中文"),
+          ),
           Text("CountTest: ${s.count}", style: TextStyle(fontSize: 32)),
           Text("CountNumTest: ${n.count}", style: TextStyle(fontSize: 20)),
         ]);

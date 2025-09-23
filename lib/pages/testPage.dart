@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_all_test/hooks/useAppDispatch.dart';
@@ -17,7 +18,7 @@ class TestPage extends ConsumerWidget {
     final dispatch = useAppDispatch(ref);
 
     return Scaffold(
-        appBar: AppBar(title: Text("Test page"),),
+        appBar: AppBar(title: Text("test".tr()),),
         body: Center(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
