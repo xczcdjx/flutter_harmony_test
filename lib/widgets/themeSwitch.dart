@@ -23,8 +23,8 @@ class ThemeSwitch extends ConsumerStatefulWidget {
 class _ThemeSwitch extends ConsumerState<ThemeSwitch> {
   final List<ThemeCls> tModes = [
     ThemeCls(0, "跟随系统", Icons.settings),
-    ThemeCls(1, "明亮", Icons.dark_mode),
-    ThemeCls(2, "暗黑", Icons.light_mode),
+    ThemeCls(1, "明亮", Icons.light_mode),
+    ThemeCls(2, "暗黑", Icons.dark_mode),
   ];
 
 // 切换语言并保存到本地
@@ -44,7 +44,6 @@ class _ThemeSwitch extends ConsumerState<ThemeSwitch> {
       (t) => t.index == curThemeModeIndex,
       orElse: () => tModes[0],
     );
-    print(currentTheme);
     return GestureDetector(
       onTapDown: (details) async {
         final selected = await showMenu<int>(
@@ -55,7 +54,7 @@ class _ThemeSwitch extends ConsumerState<ThemeSwitch> {
             details.globalPosition.dx,
             details.globalPosition.dy,
           ),
-          color: const Color(0xFF001F3F),
+          // color: const Color(0xFF001F3F),
           items: tModes.map((entry) {
             return PopupMenuItem<int>(
                 value: entry.index,
@@ -63,15 +62,15 @@ class _ThemeSwitch extends ConsumerState<ThemeSwitch> {
                   Icon(
                     entry.icon,
                     color:
-                        entry.index == curThemeMode ? Colors.red : Colors.white,
+                        entry.index == currentTheme.index ? Colors.red : null,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     entry.label,
                     style: TextStyle(
-                      color: entry.index == curThemeMode
+                      color: entry.index == currentTheme.index
                           ? Colors.red
-                          : Colors.white,
+                          : null,
                     ),
                   ),
                 ]));
